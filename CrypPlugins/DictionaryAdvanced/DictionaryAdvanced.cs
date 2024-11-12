@@ -93,7 +93,9 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             OutputList = _DictionaryCache[_Settings.Language].ToArray();
             OutputLength = OutputList.Length;
 
-            switch (_Settings.CharacterCase)
+            CharCase _Case = _Settings.CharacterCase;
+
+            switch (_Case)
             {
                 case CharCase.LowerCase:
                     OutputList = OutputList.Select(x => x.ToLower()).ToArray();
@@ -108,23 +110,33 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                     break;
 
                 case CharCase.BasicL33T:
-                    OutputList = OutputList.Select(x => x
-                        .Replace("O", "0")
-                        .Replace("I", "1")
-                        .Replace("E", "3")
-                        .Replace("A", "4")
-                        ).ToArray();
-                    break;
-
                 case CharCase.MediumL33T:
+                case CharCase.HardL33T:
+
                     OutputList = OutputList.Select(x => x
-                        .Replace("O", "0")
+                        .Replace("O", "0") // Basic = Vowels = A , E , I , O
                         .Replace("I", "1")
                         .Replace("E", "3")
                         .Replace("A", "4")
-                        .Replace("S", "5")
-                        .Replace("T", "7")
                         ).ToArray();
+
+                    if ( _Case==CharCase.MediumL33T || _Case== CharCase.HardL33T )
+                    {
+                        OutputList = OutputList.Select(x => x
+                            .Replace("S", "5") // +Medium = Consonants = S , T
+                            .Replace("T", "7")
+                        ).ToArray();
+                    }
+
+                    if ( _Case==CharCase.HardL33T )
+                    {
+                        OutputList = OutputList.Select(x => x
+                            .Replace("B", "8") // +Hard = Consonants = B , G , Z
+                            .Replace("G", "6")
+                            .Replace("Z", "2")
+                        ).ToArray();
+                    }
+
                     break;
 
                 default:
