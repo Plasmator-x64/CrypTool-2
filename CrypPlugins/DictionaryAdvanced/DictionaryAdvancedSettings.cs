@@ -24,10 +24,11 @@ namespace CrypTool.Plugins.DictionaryAdvanced
 
     public enum CharCase
     {
-        BasicL33T,
         LowerCase,
         TitleCase,
-        UpperCase
+        UpperCase,
+        BasicL33T,
+        MediumL33T
     }
 
     public enum CharDir
@@ -56,7 +57,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             }
         }
 
-        [TaskPane("CharCaseCaption", "CharCaseTooltip", null, 1, false, ControlType.ComboBox, new string[] { "BasicL33T", "LowerCase", "TitleCase", "UpperCase" })]
+        [TaskPane("CharCaseCaption", "CharCaseTooltip", null, 1, false, ControlType.ComboBox, new string[] { "LowerCase", "TitleCase", "UpperCase", "BasicL33T", "MediumL33T" })]
         public CharCase CharacterCase
         {
             get
