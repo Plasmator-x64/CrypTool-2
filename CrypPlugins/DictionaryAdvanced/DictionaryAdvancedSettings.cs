@@ -24,9 +24,10 @@ namespace CrypTool.Plugins.DictionaryAdvanced
 
     public enum CharCase
     {
-        Lowercase,
-        Titlecase,
-        Uppercase
+        BasicL33T,
+        LowerCase,
+        TitleCase,
+        UpperCase
     }
 
     public enum CharDir
@@ -38,7 +39,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
     public class DictionaryAdvancedSettings : ISettings
     {
         private string _LanguageCode = "en"; // Set Default Language to English
-        private CharCase _CharCase = CharCase.Uppercase; // Set Default Char Case to Upper
+        private CharCase _CharCase = CharCase.UpperCase; // Set Default Char Case to Upper
         private CharDir _CharDir = CharDir.Forward; // Set Default Char Direction to Forward
 
         [TaskPane("DictionaryCaption", "DictionaryTooltip", null, 0, false, ControlType.LanguageSelector)]
@@ -55,7 +56,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             }
         }
 
-        [TaskPane("CharCaseCaption", "CharCaseTooltip", null, 1, false, ControlType.ComboBox, new string[] { "Lowercase", "Titlecase", "Uppercase" })]
+        [TaskPane("CharCaseCaption", "CharCaseTooltip", null, 1, false, ControlType.ComboBox, new string[] { "BasicL33T", "LowerCase", "TitleCase", "UpperCase" })]
         public CharCase CharacterCase
         {
             get

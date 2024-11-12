@@ -95,15 +95,24 @@ namespace CrypTool.Plugins.DictionaryAdvanced
 
             switch (_Settings.CharacterCase)
             {
-                case CharCase.Lowercase:
+                case CharCase.BasicL33T:
+                    OutputList = OutputList.Select(x => x
+                        .Replace("A", "4")
+                        .Replace("E", "3")
+                        .Replace("I", "1")
+                        .Replace("O", "0")
+                        ).ToArray();
+                    break;
+
+                case CharCase.LowerCase:
                     OutputList = OutputList.Select(x => x.ToLower()).ToArray();
                     break;
 
-                case CharCase.Titlecase:
+                case CharCase.TitleCase:
                     OutputList = OutputList.Select(x => _TextInfo.ToTitleCase(x.ToLower())).ToArray();
                     break;
 
-                case CharCase.Uppercase:
+                case CharCase.UpperCase:
                     OutputList = OutputList.Select(x => x.ToUpper()).ToArray();
                     break;
 
