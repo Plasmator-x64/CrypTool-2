@@ -24,6 +24,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Controls;
 using System.Threading;
+using System.Windows;
 
 namespace CrypTool.Plugins.DictionaryAdvanced
 {
@@ -46,6 +47,13 @@ namespace CrypTool.Plugins.DictionaryAdvanced
 
         [PropertyInfo(Direction.OutputData, "DictionaryArrayOutputCaption", "DictionaryArrayOutputTooltip", false)]
         public string[] OutputList
+        {
+            get;
+            set;
+        }
+
+        [PropertyInfo(Direction.OutputData, "DictionaryStringOutputCaption", "DictionaryStringOutputTooltip", false)]
+        public string OutputString
         {
             get;
             set;
@@ -84,6 +92,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
 
             ProgressChanged(0, 1);
 
+            // Select Dictionary Language
             if (!_DictionaryCache.ContainsKey(_Settings.Language))
             {
                 List<string> _Dictionary = LanguageStatistics.LoadDictionary(LanguageStatistics.LanguageCode(_Settings.Language), DirectoryHelper.DirectoryLanguageStatistics);
@@ -93,8 +102,8 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             OutputList = _DictionaryCache[_Settings.Language].ToArray();
             OutputLength = OutputList.Length;
 
+            // Select Character Format
             CharCase _Case = _Settings.CharacterCase;
-
             switch (_Case)
             {
                 case CharCase.LowerCase:
@@ -123,17 +132,18 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                     if ( _Case==CharCase.MediumL33T || _Case== CharCase.HardL33T )
                     {
                         OutputList = OutputList.Select(x => x
-                            .Replace("S", "5") // +Medium = Consonants = S , T
+                            .Replace("S", "5") // + Medium = Consonants = S , T , Z
                             .Replace("T", "7")
+                            .Replace("Z", "2")
                         ).ToArray();
                     }
 
                     if ( _Case==CharCase.HardL33T )
                     {
                         OutputList = OutputList.Select(x => x
-                            .Replace("B", "8") // +Hard = Consonants = B , G , Z
+                            .Replace("B", "8") // + Hard = Consonants = B , G , P
                             .Replace("G", "6")
-                            .Replace("Z", "2")
+                            .Replace("P", "9")
                         ).ToArray();
                     }
 
@@ -142,6 +152,8 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                 default:
                     break;
             }
+
+            // Select Character Direction
             switch (_Settings.CharacterDirection)
             {
                 case CharDir.Forward:
@@ -156,8 +168,24 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                     break;
             }
 
+            // Update Output
             OnPropertyChanged(nameof(OutputList));
             OnPropertyChanged(nameof(OutputLength));
+
+            // Output Single String or Loop Through Words
+            if (_Settings.WordString==WordStr.Single)
+            {
+                OutputString = string.Join(",", OutputList);
+                OnPropertyChanged(nameof(OutputString));
+            }
+            else
+            {
+                foreach (string _Word in OutputList)
+                {
+                    OutputString = _Word;
+                    OnPropertyChanged(nameof(OutputString));
+                }
+            }
 
             ProgressChanged(1, 1);
         }

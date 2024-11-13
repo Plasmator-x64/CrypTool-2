@@ -121,13 +121,13 @@
     <value>Character Case</value>
   </data>
   <data name="CharCaseTooltip" xml:space="preserve">
-    <value>Selects between upper and lower case</value>
+    <value>Selects a Character Case or Format</value>
   </data>
   <data name="CharDirCaption" xml:space="preserve">
     <value>Character Direction</value>
   </data>
   <data name="CharDirTooltip" xml:space="preserve">
-    <value>Selects between forward and reverse direction</value>
+    <value>Selects between Character Direction</value>
   </data>
   <data name="DictionaryArrayOutputCaption" xml:space="preserve">
     <value>Dictionary Array Output</value>
@@ -135,8 +135,11 @@
   <data name="DictionaryArrayOutputTooltip" xml:space="preserve">
     <value>Output Dictionary as String Array</value>
   </data>
-  <data name="DictionaryCaption" xml:space="preserve">
+  <data name="DictionaryLangCaption" xml:space="preserve">
     <value>Dictionary</value>
+  </data>
+  <data name="DictionaryLangTooltip" xml:space="preserve">
+    <value>Select Dictionary with Keywords</value>
   </data>
   <data name="DictionaryLengthOutputCaption" xml:space="preserve">
     <value>Dictionary Length Output</value>
@@ -144,13 +147,22 @@
   <data name="DictionaryLengthOutputTooltip" xml:space="preserve">
     <value>Output Dictionary Length as an Integer</value>
   </data>
-  <data name="DictionaryTooltip" xml:space="preserve">
-    <value>Select dictionary with keywords</value>
+  <data name="DictionaryStringOutputCaption" xml:space="preserve">
+    <value>Dictionary String Output</value>
+  </data>
+  <data name="DictionaryStringOutputTooltip" xml:space="preserve">
+    <value>Output Dictionary as a String</value>
   </data>
   <data name="PluginCaption" xml:space="preserve">
     <value>Dictionary Advanced</value>
   </data>
   <data name="PluginTooltip" xml:space="preserve">
     <value>A Dictionary for Advanced Cryptography &amp; Cryptanalysis</value>
+  </data>
+  <data name="WordStrCaption" xml:space="preserve">
+    <value>Word Output</value>
+  </data>
+  <data name="WordStrCaptionTooltip" xml:space="preserve">
+    <value>Output Dictionary as a String or Loop Words</value>
   </data>
 </root>

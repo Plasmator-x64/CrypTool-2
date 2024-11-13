@@ -38,13 +38,20 @@ namespace CrypTool.Plugins.DictionaryAdvanced
         Reverse
     }
 
+    public enum WordStr
+    {
+        Loop,
+        Single
+    }
+
     public class DictionaryAdvancedSettings : ISettings
     {
         private string _LanguageCode = "en"; // Set Default Language to English
         private CharCase _CharCase = CharCase.UpperCase; // Set Default Char Case to Upper
         private CharDir _CharDir = CharDir.Forward; // Set Default Char Direction to Forward
+        private WordStr _WordStr = WordStr.Single; // Set Default Word Output to Single String
 
-        [TaskPane("DictionaryCaption", "DictionaryTooltip", null, 0, false, ControlType.LanguageSelector)]
+        [TaskPane("DictionaryLangCaption", "DictionaryLangTooltip", null, 0, false, ControlType.LanguageSelector)]
         public int Language
         {
             get => LanguageStatistics.LanguageId(_LanguageCode);
@@ -83,6 +90,20 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             {
                 _CharDir = value;
                 OnPropertyChanged(nameof(CharacterDirection));
+            }
+        }
+
+        [TaskPane("WordStrCaption", "WordStrCaptionTooltip", null, 1, false, ControlType.ComboBox, new string[] { "Loop", "Single" })]
+        public WordStr WordString
+        {
+            get
+            {
+                return _WordStr;
+            }
+            set
+            {
+                _WordStr = value;
+                OnPropertyChanged(nameof(WordString));
             }
         }
 

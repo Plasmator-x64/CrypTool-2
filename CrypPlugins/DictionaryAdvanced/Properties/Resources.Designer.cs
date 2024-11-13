@@ -70,7 +70,7 @@ namespace DictionaryAdvanced.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selects between upper and lower case.
+        ///   Looks up a localized string similar to Selects a Character Case or Format.
         /// </summary>
         internal static string CharCaseTooltip {
             get {
@@ -88,7 +88,7 @@ namespace DictionaryAdvanced.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selects between forward and reverse direction.
+        ///   Looks up a localized string similar to Selects between Character Direction.
         /// </summary>
         internal static string CharDirTooltip {
             get {
@@ -117,9 +117,18 @@ namespace DictionaryAdvanced.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Dictionary.
         /// </summary>
-        internal static string DictionaryCaption {
+        internal static string DictionaryLangCaption {
             get {
-                return ResourceManager.GetString("DictionaryCaption", resourceCulture);
+                return ResourceManager.GetString("DictionaryLangCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Dictionary with Keywords.
+        /// </summary>
+        internal static string DictionaryLangTooltip {
+            get {
+                return ResourceManager.GetString("DictionaryLangTooltip", resourceCulture);
             }
         }
         
@@ -142,11 +151,20 @@ namespace DictionaryAdvanced.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select dictionary with keywords.
+        ///   Looks up a localized string similar to Dictionary String Output.
         /// </summary>
-        internal static string DictionaryTooltip {
+        internal static string DictionaryStringOutputCaption {
             get {
-                return ResourceManager.GetString("DictionaryTooltip", resourceCulture);
+                return ResourceManager.GetString("DictionaryStringOutputCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Dictionary as a String.
+        /// </summary>
+        internal static string DictionaryStringOutputTooltip {
+            get {
+                return ResourceManager.GetString("DictionaryStringOutputTooltip", resourceCulture);
             }
         }
         
@@ -165,6 +183,24 @@ namespace DictionaryAdvanced.Properties {
         internal static string PluginTooltip {
             get {
                 return ResourceManager.GetString("PluginTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word Output.
+        /// </summary>
+        internal static string WordStrCaption {
+            get {
+                return ResourceManager.GetString("WordStrCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Dictionary as a String or Loop Words.
+        /// </summary>
+        internal static string WordStrCaptionTooltip {
+            get {
+                return ResourceManager.GetString("WordStrCaptionTooltip", resourceCulture);
             }
         }
     }
