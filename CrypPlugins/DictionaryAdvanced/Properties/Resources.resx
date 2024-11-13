@@ -117,17 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CharCaseCaption" xml:space="preserve">
-    <value>Character Case</value>
-  </data>
-  <data name="CharCaseTooltip" xml:space="preserve">
-    <value>Selects a Character Case or Format</value>
-  </data>
   <data name="CharDirCaption" xml:space="preserve">
     <value>Character Direction</value>
   </data>
   <data name="CharDirTooltip" xml:space="preserve">
-    <value>Selects between Character Direction</value>
+    <value>Select Character Direction</value>
+  </data>
+  <data name="CharFormatCaption" xml:space="preserve">
+    <value>Character Format</value>
+  </data>
+  <data name="CharFormatTooltip" xml:space="preserve">
+    <value>Select Character Format</value>
   </data>
   <data name="DictionaryArrayOutputCaption" xml:space="preserve">
     <value>Dictionary Array Output</value>
@@ -139,13 +139,13 @@
     <value>Dictionary</value>
   </data>
   <data name="DictionaryLangTooltip" xml:space="preserve">
-    <value>Select Dictionary with Keywords</value>
+    <value>Select Keyword Dictionary</value>
   </data>
   <data name="DictionaryLengthOutputCaption" xml:space="preserve">
     <value>Dictionary Length Output</value>
   </data>
   <data name="DictionaryLengthOutputTooltip" xml:space="preserve">
-    <value>Output Dictionary Length as an Integer</value>
+    <value>Output Dictionary Length</value>
   </data>
   <data name="DictionaryStringOutputCaption" xml:space="preserve">
     <value>Dictionary String Output</value>
@@ -153,16 +153,13 @@
   <data name="DictionaryStringOutputTooltip" xml:space="preserve">
     <value>Output Dictionary as a String</value>
   </data>
+  <data name="DictionaryStringOutputTypeTooltip" xml:space="preserve">
+    <value>Select Output Type - String or Loop Words</value>
+  </data>
   <data name="PluginCaption" xml:space="preserve">
     <value>Dictionary Advanced</value>
   </data>
   <data name="PluginTooltip" xml:space="preserve">
     <value>A Dictionary for Advanced Cryptography &amp; Cryptanalysis</value>
-  </data>
-  <data name="WordStrCaption" xml:space="preserve">
-    <value>Word Output</value>
-  </data>
-  <data name="WordStrCaptionTooltip" xml:space="preserve">
-    <value>Output Dictionary as a String or Loop Words</value>
   </data>
 </root>

@@ -24,7 +24,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Controls;
 using System.Threading;
-using System.Windows;
 
 namespace CrypTool.Plugins.DictionaryAdvanced
 {
@@ -103,24 +102,24 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             OutputLength = OutputList.Length;
 
             // Select Character Format
-            CharCase _Case = _Settings.CharacterCase;
-            switch (_Case)
+            CharFormat _CharFormat = _Settings.CharacterFormat;
+            switch (_CharFormat)
             {
-                case CharCase.LowerCase:
+                case CharFormat.LowerCase:
                     OutputList = OutputList.Select(x => x.ToLower()).ToArray();
                     break;
 
-                case CharCase.TitleCase:
+                case CharFormat.TitleCase:
                     OutputList = OutputList.Select(x => _TextInfo.ToTitleCase(x.ToLower())).ToArray();
                     break;
 
-                case CharCase.UpperCase:
+                case CharFormat.UpperCase:
                     OutputList = OutputList.Select(x => x.ToUpper()).ToArray();
                     break;
 
-                case CharCase.BasicL33T:
-                case CharCase.MediumL33T:
-                case CharCase.HardL33T:
+                case CharFormat.BasicL33T:
+                case CharFormat.MediumL33T:
+                case CharFormat.HardL33T:
 
                     OutputList = OutputList.Select(x => x
                         .Replace("O", "0") // Basic = Vowels = A , E , I , O
@@ -129,7 +128,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                         .Replace("A", "4")
                         ).ToArray();
 
-                    if ( _Case==CharCase.MediumL33T || _Case== CharCase.HardL33T )
+                    if ( _CharFormat==CharFormat.MediumL33T || _CharFormat== CharFormat.HardL33T )
                     {
                         OutputList = OutputList.Select(x => x
                             .Replace("S", "5") // + Medium = Consonants = S , T , Z
@@ -138,7 +137,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                         ).ToArray();
                     }
 
-                    if ( _Case==CharCase.HardL33T )
+                    if ( _CharFormat==CharFormat.HardL33T )
                     {
                         OutputList = OutputList.Select(x => x
                             .Replace("B", "8") // + Hard = Consonants = B , G , P
@@ -173,7 +172,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             OnPropertyChanged(nameof(OutputLength));
 
             // Output Single String or Loop Through Words
-            if (_Settings.WordString==WordStr.Single)
+            if (_Settings.StringOutputType==OutputType.Single)
             {
                 OutputString = string.Join(",", OutputList);
                 OnPropertyChanged(nameof(OutputString));

@@ -61,24 +61,6 @@ namespace DictionaryAdvanced.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Character Case.
-        /// </summary>
-        internal static string CharCaseCaption {
-            get {
-                return ResourceManager.GetString("CharCaseCaption", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Selects a Character Case or Format.
-        /// </summary>
-        internal static string CharCaseTooltip {
-            get {
-                return ResourceManager.GetString("CharCaseTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Character Direction.
         /// </summary>
         internal static string CharDirCaption {
@@ -88,11 +70,29 @@ namespace DictionaryAdvanced.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selects between Character Direction.
+        ///   Looks up a localized string similar to Select Character Direction.
         /// </summary>
         internal static string CharDirTooltip {
             get {
                 return ResourceManager.GetString("CharDirTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character Format.
+        /// </summary>
+        internal static string CharFormatCaption {
+            get {
+                return ResourceManager.GetString("CharFormatCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Character Format.
+        /// </summary>
+        internal static string CharFormatTooltip {
+            get {
+                return ResourceManager.GetString("CharFormatTooltip", resourceCulture);
             }
         }
         
@@ -124,7 +124,7 @@ namespace DictionaryAdvanced.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select Dictionary with Keywords.
+        ///   Looks up a localized string similar to Select Keyword Dictionary.
         /// </summary>
         internal static string DictionaryLangTooltip {
             get {
@@ -142,7 +142,7 @@ namespace DictionaryAdvanced.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Output Dictionary Length as an Integer.
+        ///   Looks up a localized string similar to Output Dictionary Length.
         /// </summary>
         internal static string DictionaryLengthOutputTooltip {
             get {
@@ -169,6 +169,15 @@ namespace DictionaryAdvanced.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Output Type - String or Loop Words.
+        /// </summary>
+        internal static string DictionaryStringOutputTypeTooltip {
+            get {
+                return ResourceManager.GetString("DictionaryStringOutputTypeTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dictionary Advanced.
         /// </summary>
         internal static string PluginCaption {
@@ -183,24 +192,6 @@ namespace DictionaryAdvanced.Properties {
         internal static string PluginTooltip {
             get {
                 return ResourceManager.GetString("PluginTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Word Output.
-        /// </summary>
-        internal static string WordStrCaption {
-            get {
-                return ResourceManager.GetString("WordStrCaption", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Output Dictionary as a String or Loop Words.
-        /// </summary>
-        internal static string WordStrCaptionTooltip {
-            get {
-                return ResourceManager.GetString("WordStrCaptionTooltip", resourceCulture);
             }
         }
     }

@@ -22,7 +22,7 @@ using System.ComponentModel;
 namespace CrypTool.Plugins.DictionaryAdvanced
 {
 
-    public enum CharCase
+    public enum CharFormat
     {
         LowerCase,
         TitleCase,
@@ -38,7 +38,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
         Reverse
     }
 
-    public enum WordStr
+    public enum OutputType
     {
         Loop,
         Single
@@ -47,9 +47,9 @@ namespace CrypTool.Plugins.DictionaryAdvanced
     public class DictionaryAdvancedSettings : ISettings
     {
         private string _LanguageCode = "en"; // Set Default Language to English
-        private CharCase _CharCase = CharCase.UpperCase; // Set Default Char Case to Upper
+        private CharFormat _CharFormat = CharFormat.UpperCase; // Set Default Char Format to UpperCase
         private CharDir _CharDir = CharDir.Forward; // Set Default Char Direction to Forward
-        private WordStr _WordStr = WordStr.Single; // Set Default Word Output to Single String
+        private OutputType _OutputType = OutputType.Single; // Set Default Output Type to Single String
 
         [TaskPane("DictionaryLangCaption", "DictionaryLangTooltip", null, 0, false, ControlType.LanguageSelector)]
         public int Language
@@ -65,21 +65,21 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             }
         }
 
-        [TaskPane("CharCaseCaption", "CharCaseTooltip", null, 1, false, ControlType.ComboBox, new string[] { "LowerCase", "TitleCase", "UpperCase", "BasicL33T", "MediumL33T", "HardL33T" })]
-        public CharCase CharacterCase
+        [TaskPane("CharFormatCaption", "CharFormatTooltip", null, 1, false, ControlType.ComboBox, new string[] { "LowerCase", "TitleCase", "UpperCase", "BasicL33T", "MediumL33T", "HardL33T" })]
+        public CharFormat CharacterFormat
         {
             get
             {
-                return _CharCase;
+                return _CharFormat;
             }
             set
             {
-                _CharCase = value;
-                OnPropertyChanged(nameof(CharacterCase));
+                _CharFormat = value;
+                OnPropertyChanged(nameof(CharacterFormat));
             }
         }
 
-        [TaskPane("CharDirCaption", "CharDirTooltip", null, 1, false, ControlType.ComboBox, new string[] { "Forward", "Reverse" })]
+        [TaskPane("CharDirCaption", "CharDirTooltip", null, 2, false, ControlType.ComboBox, new string[] { "Forward", "Reverse" })]
         public CharDir CharacterDirection
         {
             get
@@ -93,17 +93,17 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             }
         }
 
-        [TaskPane("WordStrCaption", "WordStrCaptionTooltip", null, 1, false, ControlType.ComboBox, new string[] { "Loop", "Single" })]
-        public WordStr WordString
+        [TaskPane("DictionaryStringOutputCaption", "DictionaryStringOutputTypeTooltip", null, 3, false, ControlType.ComboBox, new string[] { "Loop", "Single" })]
+        public OutputType StringOutputType
         {
             get
             {
-                return _WordStr;
+                return _OutputType;
             }
             set
             {
-                _WordStr = value;
-                OnPropertyChanged(nameof(WordString));
+                _OutputType = value;
+                OnPropertyChanged(nameof(StringOutputType));
             }
         }
 
