@@ -730,6 +730,6 @@
     <PostBuildEvent>xcopy  /Y "..\..\Lib" "Lib\"
 xcopy  /E /Y "..\..\Templates" "Templates\"
 xcopy  /E /Y "..\..\LanguageStatistics" "LanguageStatistics\"
-</PostBuildEvent>
+xcopy  /E /Y "..\..\CrypData" "CrypData\"</PostBuildEvent>
   </PropertyGroup>
 </Project>
