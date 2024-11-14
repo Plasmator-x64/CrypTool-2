@@ -18,6 +18,7 @@ using CrypTool.PluginBase;
 using CrypTool.PluginBase.Miscellaneous;
 using LanguageStatisticsLib;
 using System.ComponentModel;
+using System.Windows;
 
 namespace CrypTool.Plugins.DictionaryAdvanced
 {
@@ -46,20 +47,25 @@ namespace CrypTool.Plugins.DictionaryAdvanced
 
     public class DictionaryAdvancedSettings : ISettings
     {
-        private string _LanguageCode = "en"; // Set Default Language to English
+        private int _LanguageCode = 0; // Set Default Language to English
         private CharFormat _CharFormat = CharFormat.UpperCase; // Set Default Char Format to UpperCase
         private CharDir _CharDir = CharDir.Forward; // Set Default Char Direction to Forward
         private OutputType _OutputType = OutputType.Single; // Set Default Output Type to Single String
 
-        [TaskPane("DictionaryLangCaption", "DictionaryLangTooltip", null, 0, false, ControlType.LanguageSelector)]
+        [TaskPane("DictionaryLangCaption", "DictionaryLangTooltip", null, 0, false, ControlType.ComboBox, new string[] {
+            "English", "German", "French", "Spanish", "Italian", "Hungarian", "Russian", "Slovak",
+            "Latin", "Greek", "Dutch", "Swedish", "Portuguese ", "Polish", "Turkish", "UserDefined" })]
         public int Language
         {
-            get => LanguageStatistics.LanguageId(_LanguageCode);
+            get
+            {
+                return _LanguageCode;
+            }
             set
             {
-                if (value != LanguageStatistics.LanguageId(_LanguageCode))
+                if (value != _LanguageCode)
                 {
-                    _LanguageCode = LanguageStatistics.LanguageCode(value);
+                    _LanguageCode = value;
                     OnPropertyChanged(nameof(Language));
                 }
             }

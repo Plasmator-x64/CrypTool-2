@@ -18,12 +18,15 @@ using CrypTool.PluginBase;
 using CrypTool.PluginBase.IO;
 using CrypTool.PluginBase.Miscellaneous;
 using LanguageStatisticsLib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Windows.Controls;
 using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace CrypTool.Plugins.DictionaryAdvanced
 {
@@ -39,6 +42,14 @@ namespace CrypTool.Plugins.DictionaryAdvanced
         private readonly DictionaryAdvancedSettings _Settings = new DictionaryAdvancedSettings();
         private readonly Dictionary<int, string[]> _DictionaryCache = new Dictionary<int, string[]>();
         private readonly TextInfo _TextInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
+
+        private string[,] _LanguageCodes = new string[16, 2] {
+            {"English","en"} , {"German","de"} , {"French","fr"} , {"Spanish","es"} , {"Italian","it"} , {"Hungarian","hu"} ,
+            {"Russian","ru"} , {"Slovak","cs"} , {"Latin","la"} , {"Greek","el"} , {"Dutch","nl"} , {"Swedish","sv"} ,
+            {"Portuguese ","pt"} , {"Polish","pl"} , {"Turkish","tr"} , {"UserDefined","zz"} };
+
+        private List<string> _Dictionary = new List<string>();
+        private string _UserDefined = AppDomain.CurrentDomain.BaseDirectory.ToString() + "CrypData\\UserDefined.txt";
 
         #endregion
 
@@ -92,10 +103,27 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             ProgressChanged(0, 1);
 
             // Select Dictionary Language
-            if (!_DictionaryCache.ContainsKey(_Settings.Language))
+
+            if (_LanguageCodes[_Settings.Language,0]=="UserDefined")
             {
-                List<string> _Dictionary = LanguageStatistics.LoadDictionary(LanguageStatistics.LanguageCode(_Settings.Language), DirectoryHelper.DirectoryLanguageStatistics);
-                _DictionaryCache.Add(_Settings.Language, _Dictionary.ToArray());
+                if (File.Exists(_UserDefined))
+                {
+                    _DictionaryCache.Remove(_Settings.Language);
+                    _DictionaryCache.Add(_Settings.Language, File.ReadAllLines(_UserDefined));
+                }
+                else
+                {
+                    GuiLogMessage("Dictionary File Missing\n" + _UserDefined, NotificationLevel.Error);
+                    return;
+                }
+            }
+            else
+            {
+                if (!_DictionaryCache.ContainsKey(_Settings.Language))
+                {
+                    _Dictionary = LanguageStatistics.LoadDictionary(LanguageStatistics.LanguageCode(_Settings.Language), DirectoryHelper.DirectoryLanguageStatistics);
+                    _DictionaryCache.Add(_Settings.Language, _Dictionary.ToArray());
+                }
             }
 
             OutputList = _DictionaryCache[_Settings.Language].ToArray();
