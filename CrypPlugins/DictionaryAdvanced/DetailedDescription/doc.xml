@@ -1,20 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-
-<!-- You can edit this file manually or with the Util/CrypDocumentationEditor -->
 <documentation>
+	
   <language culture="en"/>
   <language culture="de-DE"/>
-
-  <introduction lang="en">    
+	
+  <introduction lang="en">
+	The advanced dictionary plugin outputs words as an Array or a String or Loops through each word.
   </introduction>
 
-  <introduction lang="de-DE">    
+  <introduction lang="de-DE">
+	Das erweiterte Wörterbuch-Plugin gibt Wörter als Array oder String aus oder durchläuft jedes Wort in einer Schleife.
   </introduction>
 
   <usage lang="en">
+	Select the dictionay language, output type and format via the plugin settings.
   </usage>
 
   <usage lang="de-DE">
+	Wählen Sie Wörterbuchsprache, Ausgabetyp und Format über die Plugin-Einstellungen aus.
   </usage>
   
   <presentation lang="en">
@@ -25,4 +28,5 @@
   
   <references>
   </references>
+	
 </documentation>

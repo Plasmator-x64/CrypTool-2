@@ -120,7 +120,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DetailedDescription\doc.xml" />
+    <Resource Include="DetailedDescription\doc.xml" />
     <Resource Include="icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
