@@ -25,7 +25,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace CrypTool.Plugins.DictionaryAdvanced
@@ -78,6 +77,27 @@ namespace CrypTool.Plugins.DictionaryAdvanced
 
         #endregion
 
+        #region Thread Members
+
+        private Thread _trLoop;
+
+        private void trLoop()
+        {
+            ProgressChanged(0, 1);
+            GuiLogMessage("Loop Begin = " + DateTime.Now.ToString(), NotificationLevel.Info);
+
+            foreach (string _Word in OutputList)
+            {
+                OutputString = _Word;
+                OnPropertyChanged(nameof(OutputString));
+            }
+
+            GuiLogMessage("Loop End = " + DateTime.Now.ToString(), NotificationLevel.Info);
+            ProgressChanged(1, 1);
+        }
+
+        #endregion
+
         #region IPlugin Members
 
         public ISettings Settings
@@ -101,6 +121,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
         {
 
             ProgressChanged(0, 1);
+            GuiLogMessage("Execute Start = " + DateTime.Now.ToString(), NotificationLevel.Info);
 
             // Select Dictionary Language
 
@@ -205,16 +226,27 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                 OutputString = string.Join(",", OutputList);
                 OnPropertyChanged(nameof(OutputString));
             }
-            else
+            else if (_Settings.StringOutputType == OutputType.Loop)
             {
-                foreach (string _Word in OutputList)
+                if (_trLoop != null)
                 {
-                    OutputString = _Word;
-                    OnPropertyChanged(nameof(OutputString));
+                    if (_trLoop.IsAlive)
+                    {
+                        _trLoop.Abort();
+                        _trLoop = null;
+                        GuiLogMessage("Loop Abort = " + DateTime.Now.ToString(), NotificationLevel.Info);
+                    }
                 }
+                _trLoop = new Thread(new ThreadStart(trLoop))
+                {
+                    IsBackground = false
+                };
+                _trLoop.Start();
             }
 
+            GuiLogMessage("Execute Stop = " + DateTime.Now.ToString(), NotificationLevel.Info);
             ProgressChanged(1, 1);
+
         }
 
         public void PostExecution()
@@ -223,6 +255,15 @@ namespace CrypTool.Plugins.DictionaryAdvanced
 
         public void Stop()
         {
+            if (_trLoop != null)
+            {
+                if (_trLoop.IsAlive)
+                {
+                    _trLoop.Abort();
+                    _trLoop = null;
+                    GuiLogMessage("Loop Abort = " + DateTime.Now.ToString(), NotificationLevel.Info);
+                }
+            }
         }
 
         public void Initialize()
