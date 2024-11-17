@@ -22,6 +22,7 @@ using System.Windows;
 
 namespace CrypTool.Plugins.DictionaryAdvanced
 {
+    #region Private Enum
 
     public enum CharFormat
     {
@@ -45,12 +46,16 @@ namespace CrypTool.Plugins.DictionaryAdvanced
         Single
     }
 
+    #endregion
+
     public class DictionaryAdvancedSettings : ISettings
     {
         private int _LanguageCode = 0; // Set Default Language to English
         private CharFormat _CharFormat = CharFormat.UpperCase; // Set Default Char Format to UpperCase
         private CharDir _CharDir = CharDir.Forward; // Set Default Char Direction to Forward
         private OutputType _OutputType = OutputType.Single; // Set Default Output Type to Single String
+
+        #region TaskPane Definitions
 
         [TaskPane("DictionaryLangCaption", "DictionaryLangTooltip", null, 0, false, ControlType.ComboBox, new string[] {
             "English", "German", "French", "Spanish", "Italian", "Hungarian", "Russian", "Slovak",
@@ -112,6 +117,8 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                 OnPropertyChanged(nameof(StringOutputType));
             }
         }
+
+        #endregion
 
         #region INotifyPropertyChanged Members
 

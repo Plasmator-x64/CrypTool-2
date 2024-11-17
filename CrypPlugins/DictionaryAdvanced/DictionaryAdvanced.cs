@@ -17,6 +17,7 @@
 using CrypTool.PluginBase;
 using CrypTool.PluginBase.IO;
 using CrypTool.PluginBase.Miscellaneous;
+using DictionaryAdvanced;
 using LanguageStatisticsLib;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace CrypTool.Plugins.DictionaryAdvanced
 {
@@ -38,17 +40,25 @@ namespace CrypTool.Plugins.DictionaryAdvanced
     {
         #region Private Variables
 
+        private DictionaryAdvancedPresentation _Presentation = new DictionaryAdvancedPresentation();
         private readonly DictionaryAdvancedSettings _Settings = new DictionaryAdvancedSettings();
-        private readonly Dictionary<int, string[]> _DictionaryCache = new Dictionary<int, string[]>();
         private readonly TextInfo _TextInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
+        private Thread _trLoop;
+        private bool _trLoopStatus;
 
         private string[,] _LanguageCodes = new string[16, 2] {
             {"English","en"} , {"German","de"} , {"French","fr"} , {"Spanish","es"} , {"Italian","it"} , {"Hungarian","hu"} ,
             {"Russian","ru"} , {"Slovak","cs"} , {"Latin","la"} , {"Greek","el"} , {"Dutch","nl"} , {"Swedish","sv"} ,
             {"Portuguese ","pt"} , {"Polish","pl"} , {"Turkish","tr"} , {"UserDefined","zz"} };
 
-        private List<string> _Dictionary = new List<string>();
         private string _UserDefined = AppDomain.CurrentDomain.BaseDirectory.ToString() + "CrypData\\UserDefined.txt";
+        private readonly Dictionary<int, string[]> _DictionaryCache = new Dictionary<int, string[]>();
+        private List<string> _Dictionary = new List<string>();
+        private CharFormat _CharFormat;
+
+        private string[] _OutputList;
+        private int _OutputListLength;
+        private string _OutputString;
 
         #endregion
 
@@ -57,43 +67,68 @@ namespace CrypTool.Plugins.DictionaryAdvanced
         [PropertyInfo(Direction.OutputData, "DictionaryArrayOutputCaption", "DictionaryArrayOutputTooltip", false)]
         public string[] OutputList
         {
-            get;
-            set;
+            get
+            {
+                return _OutputList;
+            }
+            set
+            {
+                _OutputList = value;
+                OnPropertyChanged(nameof(OutputList));
+            }
         }
 
         [PropertyInfo(Direction.OutputData, "DictionaryStringOutputCaption", "DictionaryStringOutputTooltip", false)]
         public string OutputString
         {
-            get;
-            set;
+            get
+            {
+                return _OutputString;
+            }
+            set
+            {
+                _OutputString = value;
+                OnPropertyChanged(nameof(OutputString));
+            }
         }
 
         [PropertyInfo(Direction.OutputData, "DictionaryLengthOutputCaption", "DictionaryLengthOutputTooltip", false)]
         public int OutputLength
         {
-            get;
-            set;
+            get
+            { 
+                return _OutputListLength;
+            }
+            set
+            {
+                _OutputListLength = value;
+                OnPropertyChanged(nameof(OutputLength));
+            }
         }
 
         #endregion
 
-        #region Thread Members
-
-        private Thread _trLoop;
+        #region Helper Members
 
         private void trLoop()
         {
+            /*
+
             ProgressChanged(0, 1);
             GuiLogMessage("Loop Begin = " + DateTime.Now.ToString(), NotificationLevel.Info);
 
-            foreach (string _Word in OutputList)
-            {
-                OutputString = _Word;
-                OnPropertyChanged(nameof(OutputString));
-            }
+            // [ Future Code Here ]
 
             GuiLogMessage("Loop End = " + DateTime.Now.ToString(), NotificationLevel.Info);
             ProgressChanged(1, 1);
+
+            */
+        }
+
+        private void SetPreStatus(string pStatus)
+        {
+            Presentation.Dispatcher.Invoke(DispatcherPriority.Normal, (SendOrPostCallback)delegate
+            { _Presentation.Status.Content = (pStatus + "   "); }, null);
         }
 
         #endregion
@@ -107,28 +142,21 @@ namespace CrypTool.Plugins.DictionaryAdvanced
 
         public UserControl Presentation
         {
-            get { return null; }
-        }
-
-        public void PreExecution()
-        {
+            get { return _Presentation; }
         }
 
         /// <summary>
-        /// Excutes the Plugin - Output the Selected Dictionary as a String Array
+        /// PreExcution - Process & Load Selected Dictionary
         /// </summary>
-        public void Execute()
+        public void PreExecution()
         {
 
-            ProgressChanged(0, 1);
-            GuiLogMessage("Execute Start = " + DateTime.Now.ToString(), NotificationLevel.Info);
-
-            // Select Dictionary Language
-
-            if (_LanguageCodes[_Settings.Language,0]=="UserDefined")
+            // Load Selected Dictionary
+            if (_LanguageCodes[_Settings.Language, 0] == "UserDefined")
             {
                 if (File.Exists(_UserDefined))
                 {
+                    // Cache -> Refresh ( Remove & Add ) UserDefined Dictionary
                     _DictionaryCache.Remove(_Settings.Language);
                     _DictionaryCache.Add(_Settings.Language, File.ReadAllLines(_UserDefined));
                 }
@@ -140,6 +168,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             }
             else
             {
+                // Cache -> Load LanguageStatistics Dictionary
                 if (!_DictionaryCache.ContainsKey(_Settings.Language))
                 {
                     _Dictionary = LanguageStatistics.LoadDictionary(LanguageStatistics.LanguageCode(_Settings.Language), DirectoryHelper.DirectoryLanguageStatistics);
@@ -147,48 +176,49 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                 }
             }
 
-            OutputList = _DictionaryCache[_Settings.Language].ToArray();
-            OutputLength = OutputList.Length;
+            // OutputList Variable <- Load Cache Dictionary
+            _OutputList = _DictionaryCache[_Settings.Language].ToArray();
+            _OutputListLength = _OutputList.Length;
 
-            // Select Character Format
-            CharFormat _CharFormat = _Settings.CharacterFormat;
+            // OutputList Variable <- Character Format
+            _CharFormat = _Settings.CharacterFormat;
             switch (_CharFormat)
             {
                 case CharFormat.LowerCase:
-                    OutputList = OutputList.Select(x => x.ToLower()).ToArray();
+                    _OutputList = _OutputList.Select(x => x.ToLower()).ToArray();
                     break;
 
                 case CharFormat.TitleCase:
-                    OutputList = OutputList.Select(x => _TextInfo.ToTitleCase(x.ToLower())).ToArray();
+                    _OutputList = _OutputList.Select(x => _TextInfo.ToTitleCase(x.ToLower())).ToArray();
                     break;
 
                 case CharFormat.UpperCase:
-                    OutputList = OutputList.Select(x => x.ToUpper()).ToArray();
+                    _OutputList = _OutputList.Select(x => x.ToUpper()).ToArray();
                     break;
 
                 case CharFormat.BasicL33T:
                 case CharFormat.MediumL33T:
                 case CharFormat.HardL33T:
 
-                    OutputList = OutputList.Select(x => x
+                    _OutputList = _OutputList.Select(x => x
                         .Replace("O", "0") // Basic = Vowels = A , E , I , O
                         .Replace("I", "1")
                         .Replace("E", "3")
                         .Replace("A", "4")
                         ).ToArray();
 
-                    if ( _CharFormat==CharFormat.MediumL33T || _CharFormat== CharFormat.HardL33T )
+                    if (_CharFormat == CharFormat.MediumL33T || _CharFormat == CharFormat.HardL33T)
                     {
-                        OutputList = OutputList.Select(x => x
+                        _OutputList = _OutputList.Select(x => x
                             .Replace("S", "5") // + Medium = Consonants = S , T , Z
                             .Replace("T", "7")
                             .Replace("Z", "2")
                         ).ToArray();
                     }
 
-                    if ( _CharFormat==CharFormat.HardL33T )
+                    if (_CharFormat == CharFormat.HardL33T)
                     {
-                        OutputList = OutputList.Select(x => x
+                        _OutputList = _OutputList.Select(x => x
                             .Replace("B", "8") // + Hard = Consonants = B , G , P
                             .Replace("G", "6")
                             .Replace("P", "9")
@@ -201,69 +231,68 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                     break;
             }
 
-            // Select Character Direction
+            // OutputList Variable <- Character Direction
             switch (_Settings.CharacterDirection)
             {
-                case CharDir.Forward:
-                    OutputList = OutputList;
-                    break;
-
                 case CharDir.Reverse:
-                    OutputList = OutputList.Select(x => new string(x.Reverse().ToArray())).ToArray();
+                    _OutputList = _OutputList.Select(x => new string(x.Reverse().ToArray())).ToArray();
                     break;
 
+                case CharDir.Forward:
                 default:
                     break;
             }
 
-            // Update Output
-            OnPropertyChanged(nameof(OutputList));
-            OnPropertyChanged(nameof(OutputLength));
+            // OutputList Variable <- Publish
+            OutputList = _OutputList;
+            OutputLength = _OutputListLength;
 
-            // Output Single String or Loop Through Words
-            if (_Settings.StringOutputType==OutputType.Single)
+            // OutputString Variable <- Load Formatted Dictionary
+            if (_Settings.StringOutputType == OutputType.Single)
             {
-                OutputString = string.Join(",", OutputList);
-                OnPropertyChanged(nameof(OutputString));
+                _OutputString = string.Join(",", _OutputList);
+                OutputString = _OutputString;
             }
             else if (_Settings.StringOutputType == OutputType.Loop)
             {
-                if (_trLoop != null)
+                foreach (string _Word in _OutputList)
                 {
-                    if (_trLoop.IsAlive)
-                    {
-                        _trLoop.Abort();
-                        _trLoop = null;
-                        GuiLogMessage("Loop Abort = " + DateTime.Now.ToString(), NotificationLevel.Info);
-                    }
+                    // OutputString Variable Loop <- Publish
+                    _OutputString = _Word;
+                    OutputString = _OutputString;
+                    SetPreStatus(_OutputString);
                 }
-                _trLoop = new Thread(new ThreadStart(trLoop))
-                {
-                    IsBackground = false
-                };
-                _trLoop.Start();
             }
+
+            SetPreStatus("Completed");
+
+        }
+
+        /// <summary>
+        /// Execute the Plugin
+        /// </summary>
+        public void Execute()
+        {
+            /*
+
+            ProgressChanged(0, 1);
+            GuiLogMessage("Execute Start = " + DateTime.Now.ToString(), NotificationLevel.Info);
+
+            // [ Future Code Here ]
 
             GuiLogMessage("Execute Stop = " + DateTime.Now.ToString(), NotificationLevel.Info);
             ProgressChanged(1, 1);
 
+            */
         }
 
         public void PostExecution()
         {
+            SetPreStatus("Ready");
         }
 
         public void Stop()
         {
-            if (_trLoop != null)
-            {
-                if (_trLoop.IsAlive)
-                {
-                    _trLoop.Abort();
-                    _trLoop = null;
-                    GuiLogMessage("Loop Abort = " + DateTime.Now.ToString(), NotificationLevel.Info);
-                }
-            }
         }
 
         public void Initialize()
@@ -302,5 +331,6 @@ namespace CrypTool.Plugins.DictionaryAdvanced
         }
 
         #endregion
+
     }
 }
