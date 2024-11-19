@@ -15,12 +15,15 @@
 */
 using CrypTool.PluginBase;
 using CrypTool.PluginBase.Miscellaneous;
+using Matcher;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace CrypTool.Plugins.Matcher
 {
@@ -47,8 +50,17 @@ namespace CrypTool.Plugins.Matcher
                 _Cribs = _pCribs;
             }
 
+            public string CribToString()
+            {
+                return  _PlainText + " = " +
+                        _Keyword + " = " +
+                        _Count + " = " +
+                        _Cribs + "\n";
+            }
+
         }
 
+        private MatcherPresentation _Presentation = new MatcherPresentation();
         private readonly MatcherSettings _Settings = new MatcherSettings();
         private Regex _Regex = new Regex("");
         private List<CribList> _CribList = new List<CribList>();
@@ -128,7 +140,6 @@ namespace CrypTool.Plugins.Matcher
 
         private void StartMatching()
         {
-
             _Regex = new Regex( string.Join( "|" , bInputCrib.Split(',').Where(x => x.Length>0) ) );
             _Matches = _Regex.Matches(aInputPlainText);
             _CribCount = _Matches.Count;
@@ -141,18 +152,14 @@ namespace CrypTool.Plugins.Matcher
 
                 if (_CribList.Count > 0)
                 {
-                    _OutputStr = "";
-                    foreach (var _Crib in _CribList)
+                    Presentation.Dispatcher.Invoke(DispatcherPriority.Normal, (SendOrPostCallback)delegate
                     {
-                        _OutputStr += _Crib._PlainText + " = " +
-                                        _Crib._Keyword + " = " +
-                                        _Crib._Count + " = " +
-                                        _Crib._Cribs + "\n";
-                    }
-                    OutputResult = _OutputStr;
+                        _Presentation.lvResults.ItemsSource = _CribList;
+                    }, null);
+
+                    OutputResult = _CribList[0].CribToString();
                 }
             }
-
         }
 
         #endregion
@@ -166,7 +173,7 @@ namespace CrypTool.Plugins.Matcher
 
         public UserControl Presentation
         {
-            get { return null; }
+            get { return _Presentation; }
         }
 
         public void PreExecution()

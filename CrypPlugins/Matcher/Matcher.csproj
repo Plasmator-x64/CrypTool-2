@@ -77,6 +77,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Matcher.cs" />
+    <Compile Include="MatcherPresentation.xaml.cs">
+      <DependentUpon>MatcherPresentation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MatcherSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -120,6 +123,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="DetailedDescription\doc.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MatcherPresentation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
