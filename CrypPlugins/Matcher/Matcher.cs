@@ -108,7 +108,7 @@ namespace CrypTool.Plugins.Matcher
             }
         }
 
-        [PropertyInfo(Direction.OutputData, "OutputResultCaption", "OutputResultTooltip", true)]
+        [PropertyInfo(Direction.OutputData, "OutputResultCaption", "OutputResultTooltip", false)]
         public string OutputResult
         {
             get
@@ -120,6 +120,39 @@ namespace CrypTool.Plugins.Matcher
                 _OutputResult = value;
                 OnPropertyChanged(nameof(OutputResult));
             }
+        }
+
+        #endregion
+
+        #region Helper Members
+
+        private void StartMatching()
+        {
+
+            _Regex = new Regex( string.Join( "|" , bInputCrib.Split(',').Where(x => x.Length>0) ) );
+            _Matches = _Regex.Matches(aInputPlainText);
+            _CribCount = _Matches.Count;
+
+            if (_CribCount > 0)
+            {
+                _CribStr = string.Join( "," , _Matches.Cast<Match>().Select(x => x.Value) );
+                _CribList.Add(new CribList(aInputPlainText, cInputKeyword, _CribCount, _CribStr));
+                _CribList = _CribList.OrderByDescending(x => x._Count).ThenBy(x => x._Keyword).ToList();
+
+                if (_CribList.Count > 0)
+                {
+                    _OutputStr = "";
+                    foreach (var _Crib in _CribList)
+                    {
+                        _OutputStr += _Crib._PlainText + " = " +
+                                        _Crib._Keyword + " = " +
+                                        _Crib._Count + " = " +
+                                        _Crib._Cribs + "\n";
+                    }
+                    OutputResult = _OutputStr;
+                }
+            }
+
         }
 
         #endregion
@@ -143,36 +176,28 @@ namespace CrypTool.Plugins.Matcher
 
         public void Execute()
         {
-            _Regex = new Regex(bInputCrib.Replace(",","|"));
-            _Matches = _Regex.Matches(aInputPlainText);
-            _CribCount = _Matches.Count;
-
-            if ( _CribCount > 0 )
+            if ( aInputPlainText != null )
             {
-                _CribStr = string.Join(",",
-                            _Matches
-                            .Cast<Match>()
-                            .Select(x => x.Value)
-                            .ToArray()
-                            );
-
-                _CribList.Add(new CribList(aInputPlainText, cInputKeyword, _CribCount, _CribStr));
-                _CribList = _CribList.OrderByDescending(x => x._Count).ThenBy(x=>x._Keyword).ToList();
-
-                if (_CribList.Count > 0)
+                if ( bInputCrib != null )
                 {
-                    _OutputStr = "";
-                    foreach (var _Crib in _CribList)
+                    if ( cInputKeyword != null )
                     {
-                        _OutputStr +=   _Crib._PlainText + " = " +
-                                        _Crib._Keyword + " = " +
-                                        _Crib._Count + " = " +
-                                        _Crib._Cribs + "\n";
+                        StartMatching();
                     }
-                    OutputResult = _OutputStr;
+                    else
+                    {
+                        GuiLogMessage("Error : Input Required -> Keyword", NotificationLevel.Error);
+                    }
+                }
+                else
+                {
+                    GuiLogMessage("Error : Input Required -> Crib", NotificationLevel.Error);
                 }
             }
-
+            else
+            {
+                GuiLogMessage("Error : Input Required -> PlainText", NotificationLevel.Error);
+            }
         }
 
         public void PostExecution()
