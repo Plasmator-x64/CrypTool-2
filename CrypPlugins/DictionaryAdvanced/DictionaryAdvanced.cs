@@ -45,6 +45,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
         private readonly TextInfo _TextInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
         private Thread _trLoop;
         private bool _trLoopStatus;
+        private string _Str;
 
         private string[,] _LanguageCodes = new string[16, 2] {
             {"English","en"} , {"German","de"} , {"French","fr"} , {"Spanish","es"} , {"Italian","it"} , {"Hungarian","hu"} ,
@@ -125,33 +126,11 @@ namespace CrypTool.Plugins.DictionaryAdvanced
             */
         }
 
-        private void SetPreStatus(string pStatus)
+        private void LoadDictionary()
         {
-            Presentation.Dispatcher.Invoke(DispatcherPriority.Normal, (SendOrPostCallback)delegate
-            { _Presentation.Status.Content = (pStatus + "   "); }, null);
-        }
-
-        #endregion
-
-        #region IPlugin Members
-
-        public ISettings Settings
-        {
-            get { return _Settings; }
-        }
-
-        public UserControl Presentation
-        {
-            get { return _Presentation; }
-        }
-
-        /// <summary>
-        /// PreExcution - Process & Load Selected Dictionary
-        /// </summary>
-        public void PreExecution()
-        {
-
             // Load Selected Dictionary
+            SetPresentationStatus("InProgress");
+
             if (_LanguageCodes[_Settings.Language, 0] == "UserDefined")
             {
                 if (File.Exists(_UserDefined))
@@ -162,7 +141,9 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                 }
                 else
                 {
-                    GuiLogMessage("Dictionary File Missing\n" + _UserDefined, NotificationLevel.Error);
+                    _Str = "Dictionary File Missing\n" + _UserDefined;
+                    SetPresentationStatus(_Str);
+                    GuiLogMessage(_Str, NotificationLevel.Error);
                     return;
                 }
             }
@@ -260,12 +241,42 @@ namespace CrypTool.Plugins.DictionaryAdvanced
                     // OutputString Variable Loop <- Publish
                     _OutputString = _Word;
                     OutputString = _OutputString;
-                    SetPreStatus(_OutputString);
+                    //
+                    // Enable to Display Each Word <- Blocking <- Very Slow
+                    // SetPreStatus(_OutputString);
+                    //
                 }
             }
 
-            SetPreStatus("Completed");
+            SetPresentationStatus("Completed");
+        }
 
+        private void SetPresentationStatus(string pStatus)
+        {
+            Presentation.Dispatcher.Invoke(DispatcherPriority.Normal, (SendOrPostCallback)delegate
+            { _Presentation.Status.Content = (pStatus + "   "); }, null);
+        }
+
+        #endregion
+
+        #region IPlugin Members
+
+        public ISettings Settings
+        {
+            get { return _Settings; }
+        }
+
+        public UserControl Presentation
+        {
+            get { return _Presentation; }
+        }
+
+        /// <summary>
+        /// PreExcution - Process & Load Selected Dictionary
+        /// </summary>
+        public void PreExecution()
+        {
+            LoadDictionary();
         }
 
         /// <summary>
@@ -288,7 +299,7 @@ namespace CrypTool.Plugins.DictionaryAdvanced
 
         public void PostExecution()
         {
-            SetPreStatus("Ready");
+            SetPresentationStatus("Ready");
         }
 
         public void Stop()

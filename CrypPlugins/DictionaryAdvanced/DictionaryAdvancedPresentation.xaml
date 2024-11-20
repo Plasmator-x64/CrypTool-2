@@ -9,7 +9,7 @@
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition MaxWidth="100" MinWidth="100" Width="100"/>
-            <ColumnDefinition MaxWidth="200" MinWidth="200" Width="200"/>
+            <ColumnDefinition MaxWidth="540" MinWidth="540" Width="200"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition MaxHeight="50" MinHeight="50" Height="50"/>
@@ -17,7 +17,7 @@
             <RowDefinition MaxHeight="50" MinHeight="50" Height="50"/>
             <RowDefinition MaxHeight="50" MinHeight="50" Height="50"/>
         </Grid.RowDefinitions>
-        <Label Content="Loading : " Grid.Row="4" Grid.Column="0" Background="AntiqueWhite" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <Label Name="Status" Content="Ready   " Grid.Row="4" Grid.Column="1" Background="AntiqueWhite" HorizontalAlignment="Left" VerticalAlignment="Center" />
+        <Label Content="Loading :" Grid.Row="4" Grid.Column="0" Background="AntiqueWhite" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <Label Name="Status" Content="Ready" Grid.Row="4" Grid.Column="1" Background="AntiqueWhite" HorizontalAlignment="Left" VerticalAlignment="Center" />
     </Grid>
 </UserControl>
