@@ -78,7 +78,7 @@ namespace CrypTool.Plugins.Matcher
 
         #region Data Properties
 
-        [PropertyInfo(Direction.InputData, "aInputPlainTextCaption", "aInputPlainTextTooltip", false)]
+        [PropertyInfo(Direction.InputData, "aInputPlainTextCaption", "aInputPlainTextTooltip", true)]
         public string aInputPlainText
         {
             get
@@ -92,7 +92,7 @@ namespace CrypTool.Plugins.Matcher
             }
         }
 
-        [PropertyInfo(Direction.InputData, "bInputCribCaption", "bInputCribTooltip", false)]
+        [PropertyInfo(Direction.InputData, "bInputCribCaption", "bInputCribTooltip", true)]
         public string bInputCrib
         {
             get
@@ -106,7 +106,7 @@ namespace CrypTool.Plugins.Matcher
             }
         }
 
-        [PropertyInfo(Direction.InputData, "cInputKeywordCaption", "cInputKeywordTooltip", false)]
+        [PropertyInfo(Direction.InputData, "cInputKeywordCaption", "cInputKeywordTooltip", true)]
         public string cInputKeyword
         {
             get
@@ -152,14 +152,26 @@ namespace CrypTool.Plugins.Matcher
 
                 if (_CribList.Count > 0)
                 {
-                    Presentation.Dispatcher.Invoke(DispatcherPriority.Normal, (SendOrPostCallback)delegate
-                    {
-                        _Presentation.lvResults.ItemsSource = _CribList;
-                    }, null);
-
+                    SetPresentationStatus(true);
                     OutputResult = _CribList[0].CribToString();
                 }
             }
+        }
+
+        private void SetPresentationStatus(bool pUpdate)
+        {
+            Presentation.Dispatcher.Invoke(DispatcherPriority.Normal, (SendOrPostCallback)delegate
+            {
+                if (pUpdate==true)
+                {
+                    _Presentation.lvResults.ItemsSource = _CribList;
+                }
+                else
+                {
+                    _Presentation.lvResults.ItemsSource = null;
+                    _CribList.Clear();
+                }
+            }, null);
         }
 
         #endregion
@@ -178,33 +190,12 @@ namespace CrypTool.Plugins.Matcher
 
         public void PreExecution()
         {
-            _CribList.Clear();
+            SetPresentationStatus(false);
         }
 
         public void Execute()
         {
-            if ( aInputPlainText != null )
-            {
-                if ( bInputCrib != null )
-                {
-                    if ( cInputKeyword != null )
-                    {
-                        StartMatching();
-                    }
-                    else
-                    {
-                        GuiLogMessage("Error : Input Required -> Keyword", NotificationLevel.Error);
-                    }
-                }
-                else
-                {
-                    GuiLogMessage("Error : Input Required -> Crib", NotificationLevel.Error);
-                }
-            }
-            else
-            {
-                GuiLogMessage("Error : Input Required -> PlainText", NotificationLevel.Error);
-            }
+            StartMatching();
         }
 
         public void PostExecution()
